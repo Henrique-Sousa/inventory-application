@@ -1,4 +1,6 @@
 var Category = require('../models/category');
+const { body,validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
 
 exports.category_list = function(req, res) {
     Category.find({}, 'name', function(err, results){
@@ -9,3 +11,23 @@ exports.category_list = function(req, res) {
 exports.category_create_get = function(req, res) {
     res.render('category_form', {title: 'Create category'} );
 };
+exports.category_create_post = [
+    // Validate fields.
+    body('category_name', 'Category name must not be empty.').isLength({ min: 1 }).trim(),
+    // body('category_description', 'Category description must not be empty.').isLength({ min: 1 }).trim(),
+    // Sanitize fields (using wildcard).
+    sanitizeBody('*').escape(),
+    function(req, res) {
+        const errors = validationResult(req);
+        var category = new Category({
+            name: req.body.category_name,
+            description: req.body.category_description
+        });
+        if(errors.isEmpty()) {
+            //Verify if category already exists
+            res.end();
+        } else {
+            res.render('category_form', {title: 'Create category', category, errors: errors.array()} );
+        }
+    }
+];
