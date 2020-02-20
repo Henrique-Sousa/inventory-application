@@ -9,5 +9,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/categories', category_controller.category_list);
+router.get('/category/create', category_controller.category_create_get);
 
 module.exports = router;

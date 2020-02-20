@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1= title
+    form
+        div.form-group
+            label(for="category_name") Name
+            input.form-control(type="text" id="category_name" name="category_name")
+        div.form-group
+            label(for="category_description") Description
+            textarea.form-control(id="category_description" name="category_description")
+        button.btn.btn-primary(type="submit") Submit

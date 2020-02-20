@@ -9,7 +9,7 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-light
-      a.navbar-brand(href="#") #{title}
+      a.navbar-brand(href="#") Online Store
       button.navbar-toggler(type="button",
         data-toggle="collapse",
         data-target="#navbarNav",
@@ -39,6 +39,6 @@ html
               aria-expanded="false") Categories
             div.dropdown-menu(aria-labelledby="navbarDropdown")
               a.dropdown-item(href="/categories") All categories
-              a.dropdown-item(href="#") Create new category
+              a.dropdown-item(href="/category/create") Create new category
     block content
     
