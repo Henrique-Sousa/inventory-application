@@ -25,7 +25,15 @@ exports.category_create_post = [
         });
         if(errors.isEmpty()) {
             //Verify if category already exists
-            res.end();
+            Category.findOne({'name': req.body.category_name}).exec(function(err, result) {
+                if (err) { return next(err); } 
+                else if (result) {
+                    res.render('category_form', {title: 'Create category', category, errors: [{'msg':'Category ' + req.body.category_name + ' already exists'}]});
+                } else {
+                    res.redirect('/categories');
+                }
+            });
+
         } else {
             res.render('category_form', {title: 'Create category', category, errors: errors.array()} );
         }
