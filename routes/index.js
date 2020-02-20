@@ -5,7 +5,7 @@ var category_controller = require('../controllers/categoryController');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Store' });
+  res.render('index', { title: 'Online Store' });
 });
 
 router.get('/categories', category_controller.category_list);
