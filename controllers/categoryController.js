@@ -11,6 +11,7 @@ exports.category_list = function(req, res) {
 exports.category_create_get = function(req, res) {
     res.render('category_form', {title: 'Create category'} );
 };
+
 exports.category_create_post = [
     // Validate fields.
     body('category_name', 'Category name must not be empty.').isLength({ min: 1 }).trim(),
@@ -25,12 +26,15 @@ exports.category_create_post = [
         });
         if(errors.isEmpty()) {
             //Verify if category already exists
-            Category.findOne({'name': req.body.category_name}).exec(function(err, result) {
+            Category.findOne({'name': req.body.category_name}, 'name', function(err, result) {
                 if (err) { return next(err); } 
                 else if (result) {
                     res.render('category_form', {title: 'Create category', category, errors: [{'msg':'Category ' + req.body.category_name + ' already exists'}]});
                 } else {
-                    res.redirect('/categories');
+                    category.save(function (err) {
+                        if (err) { return next(err); }
+                           res.redirect(category.url);
+                    });
                 }
             });
 
@@ -39,3 +43,7 @@ exports.category_create_post = [
         }
     }
 ];
+
+exports.category_detail = function(req, res) {
+    res.send('category ' + req.params.id);
+};
