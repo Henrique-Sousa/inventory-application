@@ -2,7 +2,7 @@ var Item = require('../models/item')
 
 exports.item_list = function(req, res) {
     Item.find().populate('category').exec(function(err, results){
-       res.render('item_list', {title: 'Item list', results} );
+       res.render('item_list', {title: 'Item list', items: results} );
     });
 };
 

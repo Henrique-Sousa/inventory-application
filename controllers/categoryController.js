@@ -5,7 +5,7 @@ const { sanitizeBody } = require('express-validator/filter');
 exports.category_list = function(req, res) {
     Category.find({}, 'name', function(err, results){
         if (err) { return next(err); }
-        res.render('category_list', {title: 'Category list', results} );
+        res.render('category_list', {title: 'Category list', categories: results} );
     });
 };
 

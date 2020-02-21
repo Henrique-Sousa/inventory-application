@@ -3,8 +3,8 @@ extends layout
 block content
   h1= title
 
-  for result in results
+  for item in items
     ul
       li
-        a(href=result.url)= result.name
+        a(href=item.url)= item.name
         
