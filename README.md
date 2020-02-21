@@ -1,0 +1,2 @@
+# inventory-application
+Imaginary store
