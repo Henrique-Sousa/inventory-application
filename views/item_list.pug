@@ -1,10 +1,10 @@
 extends layout
 
 block content
-  h1= title
+    h1= title
 
-  for item in items
     ul
-      li
-        a(href=item.url)= item.name
-        
+        for item in items
+            li
+                a(href=item.url)= item.name
+            
