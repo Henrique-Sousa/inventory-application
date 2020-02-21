@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+
+  for result in results
+    ul
+      li
+        a(href=result.url)= result.name
+        
