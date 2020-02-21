@@ -14,7 +14,7 @@ exports.category_list = function(req, res) {
 exports.category_detail = function(req, res) {
     Promise.all([
         new Promise(function(resolve, reject) {
-            Category.findOne({'_id': req.params.id}, function (err, category) {
+            Category.findById(req.params.id, function (err, category) {
                 if (err) { return next(err); }
                 resolve(category);
             });
