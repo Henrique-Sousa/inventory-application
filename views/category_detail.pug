@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1= title
+    h2= category.name
+    p= category.description
+
+    ul
+        for item in items
+            li
+                a(href=item.url)= item.name
+            
