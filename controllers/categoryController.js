@@ -65,9 +65,15 @@ exports.category_create_post = [
 ];
 
 exports.category_delete_get = function(req, res) {
-    res.send('category_delete_get');
-} 
+    Category.findById(req.params.id, function(err, category) {
+        if (err) { return next(err); }
+        if (category == null) {
+            res.redirect('/categories');
+        }
+        res.render('category_delete', {title: 'Delete Category', category});
+    })
+};
 
 exports.category_delete_post = function(req, res) {
     res.send('category_delete_post');
-}
+};
