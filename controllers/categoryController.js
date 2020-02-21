@@ -4,7 +4,8 @@ const { sanitizeBody } = require('express-validator/filter');
 
 exports.category_list = function(req, res) {
     Category.find({}, 'name', function(err, results){
-       res.render('category_list', {title: 'Category list', results} );
+        if (err) { return next(err); }
+        res.render('category_list', {title: 'Category list', results} );
     });
 };
 
@@ -45,5 +46,7 @@ exports.category_create_post = [
 ];
 
 exports.category_detail = function(req, res) {
-    res.send('category ' + req.params.id);
+    res.write('category ' + req.params.id);
+    res.write('\n');
+    res.end('list of items:');
 };
