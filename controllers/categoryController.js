@@ -63,3 +63,11 @@ exports.category_create_post = [
         }
     }
 ];
+
+exports.category_delete_get = function(req, res) {
+    res.send('category_delete_get');
+} 
+
+exports.category_delete_post = function(req, res) {
+    res.send('category_delete_post');
+}
