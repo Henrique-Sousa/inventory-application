@@ -1,4 +1,6 @@
 var Category = require('../models/category');
+var Item = require('../models/item')
+
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
@@ -7,6 +9,23 @@ exports.category_list = function(req, res) {
         if (err) { return next(err); }
         res.render('category_list', {title: 'Category list', categories: results} );
     });
+};
+
+exports.category_detail = function(req, res) {
+    Promise.all([
+        new Promise(function(resolve, reject) {
+            Category.findOne({'_id': req.params.id}, function (err, category) {
+                if (err) { return next(err); }
+                resolve(category);
+            });
+        }),
+        new Promise(function(resolve, reject) {
+            Item.find({'category': req.params.id}, function (err, items) {
+                if (err) { return next(err); }
+                resolve(items);
+            });
+        })
+    ]).then(results => res.render('category_detail', {title: 'Category detail', category: results[0], items: results[1]}));        
 };
 
 exports.category_create_get = function(req, res) {
@@ -44,9 +63,3 @@ exports.category_create_post = [
         }
     }
 ];
-
-exports.category_detail = function(req, res) {
-    res.write('category ' + req.params.id);
-    res.write('\n');
-    res.end('list of items:');
-};
