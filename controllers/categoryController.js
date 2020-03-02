@@ -118,3 +118,44 @@ exports.category_delete_post = function(req, res) {
         }
     });
 };
+
+exports.category_update_get = function(req, res) {
+    Category.findById(req.params.id, function(err, result) {
+        if (err) { return next(err); } 
+        else if (result) {
+            res.render('category_form', {title: 'Category update', category: result});
+        } 
+        else {
+            res.redirect('/categories');
+        }
+    });
+}
+
+// exports.category_update_post = function(req, res) {
+//     res.send('category_update_post' + req.params.id) ;
+// }
+
+exports.category_update_post = [
+    // Validate fields.
+    body('category_name', 'Category name must not be empty.').isLength({ min: 1 }).trim(),
+    // Sanitize fields (using wildcard).
+    sanitizeBody('*').escape(),
+    function(req, res, next) {
+        const errors = validationResult(req);
+        var category = new Category({
+            name: req.body.category_name,
+            description: req.body.category_description,
+            _id: req.params.id
+        });
+        if(errors.isEmpty()) {
+            //Verify if category already exists
+            Category.findByIdAndUpdate(req.params.id, category, {}, function(err, result) {
+                if (err) { return next(err); } 
+                res.redirect(result.url);
+            });
+
+        } else {
+            res.render('category_form', {title: 'Create category', category, errors: errors.array()} );
+        }
+    }
+];
