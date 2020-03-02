@@ -10,3 +10,10 @@ exports.item_detail = function(req, res) {
     res.write('item ' + req.params.id);
     res.end();
 };
+
+exports.item_create_get = function(req, res) {res.send('...');};
+exports.item_create_post = function(req, res) {res.send('...');};
+exports.item_delete_get = function(req, res) {res.send('...');};
+exports.item_delete_post = function(req, res) {res.send('...');};
+exports.item_update_get = function(req, res) {res.send('...');};
+exports.item_update_post = function(req, res) {res.send('...');};
