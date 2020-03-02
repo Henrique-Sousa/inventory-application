@@ -16,6 +16,9 @@ exports.category_detail = function(req, res) {
         new Promise(function(resolve, reject) {
             Category.findById(req.params.id, function (err, category) {
                 if (err) { return next(err); }
+                if (category == null) {
+                    res.redirect('/categories');
+                }
                 resolve(category);
             });
         }),
@@ -25,7 +28,8 @@ exports.category_detail = function(req, res) {
                 resolve(items);
             });
         })
-    ]).then(results => res.render('category_detail', {title: 'Category detail', category: results[0], items: results[1]}));        
+    ])
+    .then(results => res.render('category_detail', {title: 'Category detail', category: results[0], items: results[1]}));        
 };
 
 exports.category_create_get = function(req, res) {
@@ -65,15 +69,52 @@ exports.category_create_post = [
 ];
 
 exports.category_delete_get = function(req, res) {
-    Category.findById(req.params.id, function(err, category) {
-        if (err) { return next(err); }
-        if (category == null) {
-            res.redirect('/categories');
-        }
-        res.render('category_delete', {title: 'Delete Category', category});
-    })
+    Promise.all([
+        new Promise(function(resolve, reject) {
+            Category.findById(req.params.id, function (err, category) {
+                if (err) { return next(err); }
+                if (category == null) {
+                    res.redirect('/categories');
+                }
+                resolve(category);
+            });
+        }),
+        new Promise(function(resolve, reject) {
+            Item.find({'category': req.params.id}, function (err, items) {
+                if (err) { return next(err); }
+                resolve(items);
+            });
+        })
+    ])
+    .then(results => res.render('category_delete', {title: 'Delete category', category: results[0], items: results[1]}));
 };
 
 exports.category_delete_post = function(req, res) {
-    res.send('category_delete_post');
+    Promise.all([
+        new Promise(function(resolve, reject) {
+            Category.findById(req.params.id, function (err, category) {
+                if (err) { return next(err); }
+                if (category == null) {
+                    res.redirect('/categories');
+                }
+                resolve(category);
+            });
+        }),
+        new Promise(function(resolve, reject) {
+            Item.find({'category': req.params.id}, function (err, items) {
+                if (err) { return next(err); }
+                resolve(items);
+            });
+        })
+    ])
+    .then(results => {
+        if (results[1].length) {
+            res.render('category_delete', {title: 'Delete category', category: results[0], items: results[1]});
+        } else {
+            Category.findByIdAndRemove(req.body.categoryid, function(err) {
+                if (err) { return next(err); }
+                res.redirect('/categories')
+            });
+        }
+    });
 };
