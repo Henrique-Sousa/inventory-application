@@ -4,14 +4,14 @@ var Item = require('../models/item')
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
-exports.category_list = function(req, res) {
+exports.category_list = function(req, res, next) {
     Category.find({}, 'name', function(err, results){
         if (err) { return next(err); }
         res.render('category_list', {title: 'Category list', categories: results} );
     });
 };
 
-exports.category_detail = function(req, res) {
+exports.category_detail = function(req, res, next) {
     Promise.all([
         new Promise(function(resolve, reject) {
             Category.findById(req.params.id, function (err, category) {
@@ -42,7 +42,7 @@ exports.category_create_post = [
     // body('category_description', 'Category description must not be empty.').isLength({ min: 1 }).trim(),
     // Sanitize fields (using wildcard).
     sanitizeBody('*').escape(),
-    function(req, res) {
+    function(req, res, next) {
         const errors = validationResult(req);
         var category = new Category({
             name: req.body.category_name,
@@ -68,7 +68,7 @@ exports.category_create_post = [
     }
 ];
 
-exports.category_delete_get = function(req, res) {
+exports.category_delete_get = function(req, res, next) {
     Promise.all([
         new Promise(function(resolve, reject) {
             Category.findById(req.params.id, function (err, category) {
@@ -89,7 +89,7 @@ exports.category_delete_get = function(req, res) {
     .then(results => res.render('category_delete', {title: 'Delete category', category: results[0], items: results[1]}));
 };
 
-exports.category_delete_post = function(req, res) {
+exports.category_delete_post = function(req, res, next) {
     Promise.all([
         new Promise(function(resolve, reject) {
             Category.findById(req.params.id, function (err, category) {
@@ -119,7 +119,7 @@ exports.category_delete_post = function(req, res) {
     });
 };
 
-exports.category_update_get = function(req, res) {
+exports.category_update_get = function(req, res, next) {
     Category.findById(req.params.id, function(err, result) {
         if (err) { return next(err); } 
         else if (result) {
@@ -130,10 +130,6 @@ exports.category_update_get = function(req, res) {
         }
     });
 }
-
-// exports.category_update_post = function(req, res) {
-//     res.send('category_update_post' + req.params.id) ;
-// }
 
 exports.category_update_post = [
     // Validate fields.
