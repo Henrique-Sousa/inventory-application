@@ -1,0 +1,31 @@
+extends layout
+
+block content
+    h1= title
+    form(action="" method="post")
+        div.form-group
+            label(for="item_name") Name
+            input.form-control(type="text" id="item_name" name="item_name" value=(item ? item.name : ""))
+        div.form-group
+            label(for="item_description") Description
+            textarea.form-control(id="item_description" name="item_description")=(item ? item.description : "")
+        div.form-group
+            label(for="item_price") Price
+            input.form-control(type="text" id="item_price" name="item_price" value=(item ? item.price : ""))
+        div.form-group
+            label(for="item_number_in_stock") Number in stock
+            input.form-control(type="number" id="item_number_in_stock" name="item_number_in_stock" value=(item ? item.number_in_stock : ""))
+        div.form-group
+            label Categories
+            div
+                for category in categories
+                    div(style='display: inline; padding-right:10px;')
+                        input.checkbox-input(type="checkbox" id=category._id name='category' value=category._id checked=category.checked)
+                        label(for=category._id)= category.name
+
+        button.btn.btn-primary(type="submit") Submit
+
+    if errors 
+        ul
+            for error in errors
+                li!= error.msg
