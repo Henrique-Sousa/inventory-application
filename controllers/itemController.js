@@ -7,13 +7,11 @@ exports.item_list = function(req, res) {
 };
 
 exports.item_detail = function(req, res, next) {
-    // Item.findById(req.params.id, function(err, result) {
-    //     if (err) { return next(err); }
-    //     res.render('item_detail', {title: 'Item detail', item: result});
-    // });
     Item.findById(req.params.id).populate('category').exec(function(err, result) {
         if (err) { return next(err); }
-        // res.send(result.category[0].name);
+        if (result==null) {
+            res.redirect('/items');
+        }
         res.render('item_detail', {title: 'Item detail', item: result});
     });
 };
