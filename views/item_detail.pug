@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    h1= title
+    h2= item.name
+    table.table
+        tbody
+            tr
+                th(scope='row') Description
+                td= item.description
+            tr
+                th(scope='row') Categories
+                td
+                    for cat in item.category
+                        a(href=cat.url)= cat.name
+            tr
+                th(scope='row') Price
+                td $ #{item.price}
+            tr
+                th(scope='row') No. in stock
+                td= item.number_in_stock
+
+    p
+        a(href=item.url + '/delete') Delete this item
+    p
+        a(href=item.url + '/update') Update this item

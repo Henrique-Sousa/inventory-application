@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-var ItemShema = new Schema({
+var ItemSchema = new Schema({
     name: {type: String, required: true, max: 100},
     description: String,
     category: [{type: Schema.Types.ObjectId, ref: 'Category'}],
@@ -10,10 +10,10 @@ var ItemShema = new Schema({
     number_in_stock: Number
 });
 
-ItemShema
+ItemSchema
 .virtual('url')
 .get(function() {
     return '/item/' + this.id;
 });
 
-module.exports = mongoose.model('Item', ItemShema);
+module.exports = mongoose.model('Item', ItemSchema);
