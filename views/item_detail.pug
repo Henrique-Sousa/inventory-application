@@ -11,8 +11,10 @@ block content
             tr
                 th(scope='row') Categories
                 td
-                    for cat in item.category
+                    for cat, index in item.category
                         a(href=cat.url)= cat.name
+                        if index < item.category.length - 1
+                            | , 
             tr
                 th(scope='row') Price
                 td $ #{item.price}
