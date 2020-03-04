@@ -90,5 +90,50 @@ exports.item_delete_post = function(req, res) {
     });
 };
 
-exports.item_update_get = function(req, res) {res.send('...');};
+exports.item_update_get = function(req, res) {
+    Promise.all([
+        new Promise(function(resolve, reject) {
+            Item.findById(req.params.id).populate('category').exec(function(err, item) {
+                if (err) { return next(err); }
+                if (item==null) {
+                    res.redirect('/items');
+                    return;
+                }
+                resolve(item);
+            });
+        }),
+        new Promise(function(resolve, reject) {
+            Category.find({}, 'name', function(err, all_categories) {
+                if (err) { return next(err); }
+                resolve(all_categories);
+            });
+        })
+    ])
+    .then(results => {
+        var item_temp = results[0];
+        var item_category_ids = [];
+        for (let cat of item_temp.category) {
+            item_category_ids.push(cat._id);
+        }
+        var item = new Item({
+            name: item_temp.name,
+            description: item_temp.description,
+            price: item_temp.price,
+            number_in_stock: item_temp.number_in_stock,
+            category: item_category_ids
+        });
+
+        var all_categories = results[1];
+        
+        for(let i=0; i < all_categories.length; i++) {
+            if (item.category.indexOf(all_categories[i]._id) > -1) {
+                    all_categories[i].checked = 'true';
+            }
+        }
+
+        res.render('item_form', {title: 'Item detail', item, categories: all_categories});
+    });
+    
+};
+
 exports.item_update_post = function(req, res) {res.send('...');};
